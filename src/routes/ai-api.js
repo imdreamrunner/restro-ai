@@ -1,7 +1,7 @@
 import { createController } from 'awilix-koa'
 
 const api = visionService => ({
-  getCameraImage: async ctx => ctx.ok(await visionService.getObjectList()),
+  getCameraImage: async ctx => ctx.ok(await visionService.takePhoto()),
   getObjectList: async ctx => ctx.ok(await visionService.getObjectList())
 })
 
