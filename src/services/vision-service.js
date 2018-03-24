@@ -1,31 +1,4 @@
-import * as fs from 'mz/fs'
 import * as vision from '@google-cloud/vision'
-import * as NodeWebcam from 'node-webcam'
-
-const webcamOpts = {
-  // Picture related
-  width: 1280,
-  height: 720,
-  quality: 100,
-  // Delay to take shot
-  delay: 1,
-  // Save shots in memory
-  saveShots: true,
-  // [jpeg, png] support varies
-  // Webcam.OutputTypes
-  output: 'jpeg',
-  // Which camera to use
-  // Use Webcam.list() for results
-  // false for default device
-  device: false,
-  // [location, buffer, base64]
-  // Webcam.CallbackReturnTypes
-  callbackReturn: 'buffer',
-  // Logging
-  verbose: true
-}
-
-const webcam = NodeWebcam.create(webcamOpts)
 
 // Creates a client
 const client = new vision.ImageAnnotatorClient()
@@ -49,25 +22,13 @@ const objectList = [
   }
 ]
 
-function takePhoto() {
-  return new Promise((resolve, reject) => {
-    webcam.capture('/tmp/test_picture.jpg', (err, data) => {
-      if (err) reject(err)
-      console.log(data)
-      resolve(data)
-    })
-  })
-}
-
-async function getObjectFromVision() {
-  const fileContent = await fs.readFile('./sample/bottle.jpg')
+async function getObjectFromVision(fileContent) {
   const results = await client.labelDetection(fileContent)
   const labels = results[0].labelAnnotations
   const labelNames = labels.map(label => label.description)
-  console.log(labelNames)
+  console.log(results)
   for (let obj of objectList) {
     const { key, tags } = obj
-    console.log(tags)
     for (let tag of tags) {
       for (let label of labelNames) {
         console.log(label, tag, label.indexOf(tag))
@@ -81,12 +42,9 @@ async function getObjectFromVision() {
 }
 
 export default class VisionService {
-  async takePhoto() {
-    return takePhoto()
-  }
-
-  async getObjectList() {
-    const prediction = await getObjectFromVision()
+  async getObjectDetection(base64Image) {
+    const buffer = Buffer.from(base64Image, 'base64')
+    const prediction = await getObjectFromVision(buffer)
     return {
       prediction
     }

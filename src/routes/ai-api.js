@@ -1,8 +1,10 @@
 import { createController } from 'awilix-koa'
 
 const api = visionService => ({
-  getCameraImage: async ctx => ctx.ok(await visionService.takePhoto()),
-  getObjectList: async ctx => ctx.ok(await visionService.getObjectList())
+  getObjectList: async ctx => {
+    const { image } = ctx.request.body
+    ctx.ok(await visionService.getObjectDetection(image))
+  }
 })
 
 // Maps routes to method calls on the `api` controller.
@@ -10,5 +12,4 @@ const api = visionService => ({
 // https://github.com/jeffijoe/awilix-router-core
 export default createController(api)
   .prefix('')
-  .get('/camera', 'getCameraImage')
-  .get('/identify', 'getObjectList')
+  .post('/identify', 'getObjectList')

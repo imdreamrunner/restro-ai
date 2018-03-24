@@ -33,7 +33,7 @@ export async function createServer() {
     // Handles CORS.
     .use(cors())
     // Parses request bodies.
-    .use(bodyParser())
+    .use(bodyParser({ jsonLimit: '50mb' }))
     // Creates an Awilix scope per request. Check out the awilix-koa
     // docs for details: https://github.com/jeffijoe/awilix-koa
     .use(scopePerRequest(container))
