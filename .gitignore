@@ -4,3 +4,5 @@ dist
 .idea
 coverage
 .nyc_output
+credential.json
+.DS_Store
