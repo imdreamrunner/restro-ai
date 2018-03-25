@@ -5,20 +5,32 @@ const client = new vision.ImageAnnotatorClient()
 
 const objectList = [
   {
-    key: 'bottle',
+    key: 'Bottle (Plastic)',
     tags: ['bottle', 'water']
   },
   {
-    key: 'mouse',
+    key: 'Mouse (Electronic)',
     tags: ['mouse']
   },
   {
-    key: 'battery',
+    key: 'Battery (Hazardous)',
     tags: ['battery']
   },
   {
-    key: 'electronic',
+    key: 'Light Bulb (Electrical)',
+    tags: ['battery']
+  },
+  {
+    key: 'Mobile Phone (Electronic)',
     tags: ['phone']
+  },
+  {
+    key: 'Keyboard (Electronic)',
+    tags: ['keyboard']
+  },
+  {
+    key: 'Beverage Can (Metal)',
+    tags: ['drink', 'cola']
   }
 ]
 
@@ -32,7 +44,7 @@ async function getObjectFromVision(fileContent) {
     for (let tag of tags) {
       for (let label of labelNames) {
         console.log(label, tag, label.indexOf(tag))
-        if (label.indexOf(tag) >= 0) {
+        if (label.toLowerCase().indexOf(tag) >= 0) {
           return key
         }
       }

@@ -11,7 +11,7 @@
   "scripts": {
     "start": "node dist/bin/www.js",
     "build": "rimraf dist && cross-env NODE_ENV=production babel src -d dist -s",
-    "dev": "source .env && nodemon src/bin/www.js",
+    "dev": "bash ./set-env.sh && nodemon src/bin/www.js",
     "test": "cross-env NODE_ENV=test jest",
     "cover": "npm run test -- --coverage",
     "lint": "eslint --fix src && prettier --write \"src/**/*.js\"",
